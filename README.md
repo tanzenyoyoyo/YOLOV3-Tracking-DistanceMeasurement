@@ -47,7 +47,7 @@ python detection_test.py  # Detection images are saved in `./data/detection`
 ```
 The dog & cat are detected and the distance is shown on the boundingboxes
 
-![image](https://github.com/tanzenyoyoyo/YOLOV3-Tracking-Distancing/blob/master/docs/detection.png)
+![image](https://github.com/tanzenyoyoyo/YOLOV3-Tracking-DistanceMeasurement/blob/master/result_demo/fovs1_frame25_out15.png)
 
 
 Then the model can be evaluated with
@@ -69,7 +69,7 @@ __C.TRACKING.INPUT_TYPE           = "video"
 
 Then the tracking images and video are saved in ```./data/tracking/video```
 
-![image](https://github.com/tanzenyoyoyo/YOLOV3-Tracking-Distancing/blob/master/docs/trace_video.jpg)
+![image](https://github.com/tanzenyoyoyo/YOLOV3-Tracking-DistanceMeasurement/blob/master/result_demo/Tracking_video.jpg)
 
 ## Acknowledgement
 
