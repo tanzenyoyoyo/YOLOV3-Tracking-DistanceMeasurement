@@ -43,7 +43,7 @@ __C.YOLO.IOU_LOSS_THRESH      = 0.5
 __C.TRAIN                     = edict()
 
 __C.TRAIN.ANNOT_PATH          = "./data/dataset/dogcat/Label_train.txt"
-__C.TRAIN.BATCH_SIZE          = 1
+__C.TRAIN.BATCH_SIZE          = 4
 __C.TRAIN.INPUT_SIZE          = [416]
 __C.TRAIN.DATA_AUG            = True
 __C.TRAIN.LR_INIT             = 1e-4
@@ -51,7 +51,7 @@ __C.TRAIN.LR_END              = 1e-7
 __C.TRAIN.WARMUP_EPOCHS       = 1
 __C.TRAIN.EPOCHS              = 2
 __C.TRAIN.LOG_DIR             = "./data/log"
-__C.TRAIN.LOAD_WEIGHTS_PATH   = "./weights/yolov3"              #若权重为.weights文件，则为'./weights/name.weights'
+__C.TRAIN.LOAD_WEIGHTS_PATH   = "./weights/yolov3.weights"      #若权重为.weights文件，则为'./weights/name.weights'
 __C.TRAIN.SAVE_WEIGHTS_PATH   = "./weights/yolov3"
 __C.TRAIN.TRAINING_FROM_SCRATCH= False                          #transfer learning or training from scratch
 
@@ -77,12 +77,12 @@ __C.TRACKING                      = edict()
 __C.TRACKING.INPUT_TYPE           = "video"                     #["image", "video"]
 __C.TRACKING.INPUT_VIDEO_PATH     = "./docs"
 __C.TRACKING.OUTPUT_VIDEO_PATH    = "./data/tracking/video"
-__C.TRACKING.VIDEO_NAME           = '/dog1.mp4'
+__C.TRACKING.VIDEO_NAME           = '/V011_front60.mp4'
 __C.TRACKING.INPUT_IMAGE_PATH     = "./data/dataset/dogcat/Label_test.txt"
 __C.TRACKING.OUTPUT_IMAGE_PATH    = "./data/tracking/image"
 __C.TRACKING.WEIGHTS              = "./weights/yolov3"
-__C.TRACKING.DIST_THRESH          = 100                         #距离阈值，超过阈值时，将删除轨迹并创建新轨迹
-__C.TRACKING.MAX_FRAMES_TO_SKIP   = 8                           #超过多少帧没有识别，就放弃识别该物体，未检测到的跟踪对象允许跳过的最大帧数
+__C.TRACKING.DIST_THRESH          = 180                         #距离阈值，超过阈值时，将删除轨迹并创建新轨迹
+__C.TRACKING.MAX_FRAMES_TO_SKIP   = 5                           #超过多少帧没有识别，就放弃识别该物体，未检测到的跟踪对象允许跳过的最大帧数
 __C.TRACKING.MAX_TRACE_LENGHT     = 15                          #轨迹的最大长度
 __C.TRACKING.TRACKIDCOUNT         = 100                         #每个跟踪对象的标识基础（在此基础上累加）
 

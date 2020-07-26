@@ -43,24 +43,32 @@ with open(new_txt_dir+'\\'+'Label_all.txt', 'w+') as f:
         for child in root.findall('object'):  # 找到图片中的所有框
 
             name = str(child.find('name').text)  # 找到框的标注值并进行读取
-            if name == 'cat':
+            if name in ['dog', 'car', 'cat', 'bus', 'cyclist', 'person', 'truck', 'signal_lamp']:
+                if name == 'dog':
+                    ID = 16
+                elif name == 'car':
+                    ID = 2
+                elif name == 'cat':
+                    ID = 15
+                elif name == 'bus':
+                    ID = 5
+                elif name == 'cyclist':
+                    ID = 1
+                elif name == 'person':
+                    ID = 0
+                elif name == 'truck':
+                    ID = 7
+                elif name == 'signal_lamp':
+                    ID = 9
+
                 sub = child.find('bndbox')  # 找到框的标注值并进行读取
-                ID = utils.read_class_ids(cfg.YOLO.CLASSES)[name]
                 xmin = float(sub[0].text)
                 ymin = float(sub[1].text)
                 xmax = float(sub[2].text)
                 ymax = float(sub[3].text)
                 f.write(' '.join(
                 [str(' ') + str(xmin) + "," + str(ymin) + "," + str(xmax) + "," + str(ymax) + "," + str(ID)]))
-            elif name == 'dog':
-                sub = child.find('bndbox')  # 找到框的标注值并进行读取
-                ID = utils.read_class_ids(cfg.YOLO.CLASSES)[name]
-                xmin = float(sub[0].text)
-                ymin = float(sub[1].text)
-                xmax = float(sub[2].text)
-                ymax = float(sub[3].text)
-                f.write(' '.join(
-                    [str(' ') + str(xmin) + "," + str(ymin) + "," + str(xmax) + "," + str(ymax) + "," + str(ID)]))
+
             else:
                 continue
         f.write('\n')

@@ -347,18 +347,20 @@ def tracking_annotation(image, tracker15, tracker16, INPUT_SIZE, model, CLASSES)
     bboxes_new = []
     for bbox in bboxes:
         class_ind = int(bbox[5])
+        score = float(bbox[4])
+        #score = '%.4f' % score
         if class_ind in [15, 16]:
-            bboxes_new.append(bbox)
+            if score >= 0.5:
+                bboxes_new.append(bbox)
 
     for bbox in bboxes_new:
-        class_ind = int(bbox[5])
+        #class_ind = int(bbox[5])
         coor = np.array(bbox[:4], dtype=np.int32)
         score = bbox[4]
         class_ind = int(bbox[5])
         out_classes.append(class_ind)
         class_name = CLASSES[class_ind]
         score = '%.4f' % score
-
         # only for print to check out
         xmin, ymin, xmax, ymax = list(map(str, coor))
         bbox_mess = ' '.join([class_name, score, xmin, ymin, xmax, ymax]) + '\n'
@@ -370,10 +372,10 @@ def tracking_annotation(image, tracker15, tracker16, INPUT_SIZE, model, CLASSES)
 
     image = draw_bbox(image, bboxes_new)
     centers15, number15, centers16, number16, = calc_center(out_boxes, out_classes, out_scores, score_limit=0.5)
-    tracker15, result_cat = trackerDetection(tracker15, image, centers15, number15, max_point_distance=20)
+    tracker15, result_cat = trackerDetection(tracker15, image, centers15, number15, max_point_distance=40)
     cv2.putText(result_cat, 'cat: ' + str(number15), (20, 40), font, 1, (0, 0, 255), 2)  # 左上角，猫计数
 
-    tracker16, result_dogcat = trackerDetection(tracker16, result_cat, centers16, number16, max_point_distance=20)
+    tracker16, result_dogcat = trackerDetection(tracker16, result_cat, centers16, number16, max_point_distance=40)
     cv2.putText(result_dogcat, 'dog: ' + str(number16), (20, 80), font, 1, (0, 0, 255), 2)  # 左上角，狗计数
 
     return result_dogcat

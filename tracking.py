@@ -66,7 +66,8 @@ if cfg.TRACKING.INPUT_TYPE == "video":
     while (True):
         return_value, frame = vid.read()
         if return_value:
-            image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            # image = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            image = frame
         else:
             break
     #        raise ValueError("No image!")

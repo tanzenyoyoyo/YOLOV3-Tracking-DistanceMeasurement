@@ -5,9 +5,9 @@
 #
 #   Editor      : Pycharm
 #   File name   : main.py
-#   Author      : Yu Bai, Chunliu Xu, Chengcheng Hou
+#   Author      :
 #   Created date: 2020-07-22
-#   Description : analyse result
+#   Description : 生成results文件夹中的mAP统计图
 #
 #================================================================
 import glob
@@ -761,6 +761,48 @@ with open(results_files_path + "/results.txt", 'a') as results_file:
     text += ", fp:" + str(n_pred - count_true_positives[class_name]) + ")\n"
     results_file.write(text)
 
+  """
+   Write recall precision accuracy per class to results.txt
+  """
+
+
+  with open(results_files_path + "/results.txt", 'a') as results_file:
+
+    # sort the dictionary by decreasing value, into a list of tuples
+    sorted_dic_by_value = sorted(pred_counter_per_class.items(), key=operator.itemgetter(1))
+    # unpacking the list of tuples into two lists
+    sorted_keys, sorted_values = zip(*sorted_dic_by_value)
+    #
+    if true_p_bar != "":
+      """
+       Special case to draw in (green=true predictions) & (red=false predictions)
+      """
+      fp_sorted = []
+      tp_sorted = []
+      for key in sorted_keys:
+        fp_sorted.append(pred_counter_per_class[key] - true_p_bar[key])
+        tp_sorted.append(true_p_bar[key])
+      A = tp_sorted[0]
+      B = fp_sorted[1]
+      C = fp_sorted[0]
+      D = tp_sorted[1]
+
+
+    results_file.write("\n# recall, precision, accuracy per class\n")
+    recall_cat = D / (D + C)
+    recall_dog = A / (A + B)
+    precision_cat = D / (D + B)
+    precision_dog = A / (A + C)
+    accuracy_cat = (D + A) / (D + A + C + B)
+    accuracy_dog = (A + D) / (D + A + C + B)
+
+    text = pred_classes[1] + ": "
+    text += " recall:" + str('%.4f' %recall_cat) + " precision:" + str('%.4f' %precision_cat) + " accuracy:" + str('%.4f' %accuracy_cat) + '\n'
+    text += pred_classes[0] + ": "
+    text += " recall:" + str('%.4f' %recall_dog) + " precision:" + str('%.4f' %precision_dog) + " accuracy:" + str('%.4f' %accuracy_dog) + '\n'
+    results_file.write(text)
+
+    print(text)
 """
  Draw mAP plot (Show AP's of all classes in decreasing order)
 """

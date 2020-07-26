@@ -73,11 +73,13 @@ with open(cfg.TEST.ANNOT_PATH, 'r') as annotation_file:
         num_bbox_gt = len(bboxes_gt)
         with open(ground_truth_path, 'w') as f:
             for i in range(num_bbox_gt):
-                class_name = CLASSES[classes_gt[i]]
-                xmin, ymin, xmax, ymax = list(map(str, bboxes_gt[i]))
-                bbox_mess = ' '.join([class_name, xmin, ymin, xmax, ymax]) + '\n'
-                f.write(bbox_mess)
-                print('\t' + str(bbox_mess).strip())
+                if classes_gt[i] == 15 or classes_gt[i] == 16:
+                    class_name = CLASSES[classes_gt[i]]
+                    xmin, ymin, xmax, ymax = list(map(str, bboxes_gt[i]))
+                    bbox_mess = ' '.join([class_name, xmin, ymin, xmax, ymax]) + '\n'
+                    f.write(bbox_mess)
+                    print('\t' + str(bbox_mess).strip())
+
         print('=> predict result of %s:' % image_name)
         predict_result_path = os.path.join(predicted_dir_path, str(num) + '.txt')
         # Predict Process
@@ -90,14 +92,24 @@ with open(cfg.TEST.ANNOT_PATH, 'r') as annotation_file:
         pred_bbox = tf.concat(pred_bbox, axis=0)
         bboxes = utils.postprocess_boxes(pred_bbox, image_size, INPUT_SIZE, cfg.TEST.SCORE_THRESHOLD)
         bboxes = utils.nms(bboxes, cfg.TEST.IOU_THRESHOLD, method='nms')
-
+        out_boxes = []
+        out_classes = []
+        out_scores = []
+        bboxes_new = []
+        for bbox in bboxes:
+            class_ind = int(bbox[5])
+            score = float(bbox[4])
+            # score = '%.4f' % score
+            if class_ind in [15, 16]:
+                if score >= 0.5:
+                    bboxes_new.append(bbox)
 
         if cfg.TEST.DECTECTED_IMAGE_PATH is not None:
-            image = utils.draw_bbox(image, bboxes)
+            image = utils.draw_bbox(image, bboxes_new)
             cv2.imwrite(cfg.TEST.DECTECTED_IMAGE_PATH+image_name, image)
 
         with open(predict_result_path, 'w') as f:
-            for bbox in bboxes:
+            for bbox in bboxes_new:
                 coor = np.array(bbox[:4], dtype=np.int32)
                 score = bbox[4]
                 class_ind = int(bbox[5])
